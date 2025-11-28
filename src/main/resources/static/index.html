@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Ejercicio</h1>
+    <form id="formulario">
+        <label for="usuario">Usuario:</label>
+        <input type="text" id="usuario" >
+
+        <label for="contrasena">Contraseña:</label>
+        <input type="password" id="contrasena">
+
+        <button type="submit">Enviar</button>
+    </form>
+    <h2>Respuesta del servidor</h2>
+    <p id="respuesta"></p>
+    <script>
+        const formulario=document.getElementById("formulario")
+
+        formulario.addEventListener("submit",async (event) =>{
+            event.preventDefault();
+
+            const usuario= document.getElementById("usuario").value;
+            const contrasena= document.getElementById("contrasena").value;
+
+            if (usuario === "" || contrasena === ""){
+                document.getElementById("respuesta").textContent = "Todos los campos deben estar llenos";
+                return;
+            }
+
+            const datos={
+                usuario,
+                contrasena
+            };
+
+            const respuesta= await fetch("/ejercicio",{
+                method: "POST",
+                headers:{ "Content-Type": "application/json"},
+                body:JSON.stringify(datos)
+            });
+
+            const respuestaJSON = await respuesta.json();
+            document.getElementById("respuesta").textContent = respuestaJSON.mensaje;
+
+        })
+    </script>
+</body>
+</html>
